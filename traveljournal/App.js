@@ -10,7 +10,8 @@ import {
 } from 'react-native';
 import Home from './screens/Home';
 import Journal from './screens/Journal';
-import Card from './screens/Card';
+import CreateCard from './screens/CreateCard';
+import ViewCard from './screens/ViewCard';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
@@ -24,7 +25,8 @@ const App = () => {
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Journal" component={Journal} />
-          <Stack.Screen name="Card" component={Card} />
+          <Stack.Screen name="Create Card" component={CreateCard} />
+          <Stack.Screen name="ViewCard" component={ViewCard} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
