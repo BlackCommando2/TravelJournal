@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import ViewCard from './ViewCard';
-const Journal = ({navigation}) => {
+
+const Journal = ({ navigation }) => {
   const [cards, setCards] = useState([]);
 
   useEffect(() => {
-    console.log(cards);
     loadCardsFromStorage();
   }, []);
 
@@ -30,10 +29,10 @@ const Journal = ({navigation}) => {
   };
 
   const navigateToViewCard = card => {
-    navigation.navigate('ViewCard', {card});
+    navigation.navigate('ViewCard', { card });
   };
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => navigateToViewCard(item)}>
       <View style={styles.cardContainer}>
         <Text>{item.title}</Text>
@@ -48,7 +47,12 @@ const Journal = ({navigation}) => {
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-      {/* Add other components as needed */}
+      <TouchableOpacity
+        style={styles.addButton}
+        onPress={() => navigation.navigate('Create Card')}
+      >
+        <Text style={styles.addButtonText}>Add New Card</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -57,12 +61,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#1f1f1f',
   },
   cardContainer: {
     backgroundColor: '#f0f0f0',
     padding: 10,
     marginBottom: 10,
     borderRadius: 8,
+  },
+  addButton: {
+    backgroundColor: '#3498db',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    marginVertical: 10,
+    alignItems: 'center',
+  },
+  addButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 

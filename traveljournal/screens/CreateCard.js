@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const CreateCard = () => {
   const [imageSources, setImageSources] = useState([]);
@@ -20,9 +20,6 @@ const CreateCard = () => {
   const [cardtitle, setCardtitle] = useState('');
   const [carddescription, setCarddescription] = useState('');
   useEffect(() => {
-    // console.log('imageSources: ' + imageSources);
-    // console.log('type: ' + imageSources[1]);
-    // Load previously stored images when the component mounts
     loadStoredCards();
     console.log('Create: ' + cards);
   }, []);
@@ -36,9 +33,11 @@ const CreateCard = () => {
     })
       .then(images => {
         // Set the image sources from the selected images
-        const selectedImages = images.map(image => image.path);
+        let selectedImages = images.map(image => image.path);
+        selectedImages = [...imageSources, ...selectedImages];
         setImageSources(selectedImages);
         console.log(selectedImages);
+        console.log(imageSources);
         // Save the selected images to AsyncStorage for persistence
         // saveImagesToStorage(selectedImages);
       })
@@ -57,15 +56,6 @@ const CreateCard = () => {
       });
   };
 
-  // const saveImagesToStorage = async images => {
-  //   try {
-  //     await AsyncStorage.setItem('@MyApp:images', JSON.stringify(images));
-  //     console.log('Images saved to AsyncStorage');
-  //   } catch (error) {
-  //     console.log('Error saving images to AsyncStorage: ', error);
-  //   }
-  // };
-
   const loadStoredCards = async () => {
     try {
       const storedCards = await AsyncStorage.getItem('@MyApp:cards');
@@ -80,20 +70,14 @@ const CreateCard = () => {
   };
 
   const deleteImage = async index => {
-    // Remove the image at the specified index from the state
     const updatedImages = [...imageSources];
     updatedImages.splice(index, 1);
     setImageSources(updatedImages);
-
-    // Save the updated images to AsyncStorage
-    // saveImagesToStorage(updatedImages);
   };
 
   const cleanAllImages = async () => {
     try {
-      // Remove all images from AsyncStorage
       await AsyncStorage.removeItem('@MyApp:cards');
-      // Clear the imageSources state
       setImageSources([]);
       setCards([]);
       console.log('All images cleaned from AsyncStorage');
@@ -109,11 +93,7 @@ const CreateCard = () => {
       description: carddescription,
       images: imageSources,
     };
-
-    // Add the new card to the array of cards
     setCards([...cards, newCard]);
-
-    // Save the updated array of cards to AsyncStorage
     saveCardsToStorage([...cards, newCard]);
   };
 
@@ -127,16 +107,18 @@ const CreateCard = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
         {imageSources.map((imageSource, index) => (
           <View key={index}>
-            <Image source={{uri: imageSource}} style={styles.image} />
-            <Button title="Delete" onPress={() => deleteImage(index)} />
+            <Image source={{ uri: imageSource }} style={styles.image} />
+            <View style={styles.deleteButton}>
+              <Button title="Delete Image" onPress={() => deleteImage(index)} color="#e74c3c" />
+            </View>
           </View>
         ))}
-        <View style={styles.container}>
-          <Text>Name:</Text>
+        <View style={styles.textcontainer}>
+          <Text style={styles.text}>Name:</Text>
           <TextInput
             style={styles.input}
             value={cardname}
@@ -144,7 +126,7 @@ const CreateCard = () => {
             placeholder="Enter name..."
           />
 
-          <Text>Title:</Text>
+          <Text style={styles.text}>Title:</Text>
           <TextInput
             style={styles.input}
             value={cardtitle}
@@ -152,7 +134,7 @@ const CreateCard = () => {
             placeholder="Enter title..."
           />
 
-          <Text>Description:</Text>
+          <Text style={styles.text}>Description:</Text>
           <TextInput
             style={styles.input}
             value={carddescription}
@@ -160,10 +142,28 @@ const CreateCard = () => {
             placeholder="Enter description..."
           />
         </View>
-        <Button title="Select Multiple Images" onPress={selectMultipleImages} />
-        <Button title="Save Card" onPress={saveCard} />
-        <Button title="Cleanup" onPress={clean} />
-        <Button title="Clean All Images" onPress={cleanAllImages} />
+        <View style={styles.buttonContainer}>
+          <Button
+            title="Add Image"
+            onPress={selectMultipleImages}
+            color="#3498db" // Custom button color
+          />
+          <Button
+            title="Save Card"
+            onPress={saveCard}
+            color="#27ae60" // Custom button color
+          />
+          <Button
+            title="Cleanup"
+            onPress={clean}
+            color="#e74c3c" // Custom button color
+          />
+          <Button
+            title="Clean All Images"
+            onPress={cleanAllImages}
+            color="#e74c3c" // Custom button color
+          />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -172,14 +172,47 @@ const CreateCard = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#202020',
+  },
+  deleteButton: {
     alignItems: 'center',
-    justifyContent: 'center',
+    marginBottom: 10,
   },
   image: {
-    width: 200,
-    height: 200,
+    width: "100%",
+    height: 500,
     resizeMode: 'contain',
     marginBottom: 20,
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    height: 220,
+    width: '100%',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  textcontainer: {
+    backgroundColor: '#303030', // Color for the textcontainer background
+    padding: 20,
+    marginBottom: 20,
+    width: '100%',
+
+  },
+  input: {
+    color: '#000000',
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    marginBottom: 10,
+    width: '100%',
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#000000',
   },
 });
 

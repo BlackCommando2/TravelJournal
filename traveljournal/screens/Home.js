@@ -1,33 +1,57 @@
 import React from 'react';
-import {Button, View, Text} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const Home = ({navigation}) => {
-  // const cleanAllImages = async () => {
-  //   try {
-  //     // Remove all images from AsyncStorage
-  //     await AsyncStorage.removeItem('@MyApp:images');
-  //     // Clear the imageSources state
-  //     // setImageSources([]);
-  //     console.log('All images cleaned from AsyncStorage');
-  //   } catch (error) {
-  //     console.log('Error cleaning images from AsyncStorage: ', error);
-  //   }
-  // };
+const Home = ({ navigation }) => {
   return (
-    <View>
-      <Button
-        title="Go to Journal"
+    <View style={styles.container}>
+      <View style={styles.background} />
+      <TouchableOpacity
+        style={styles.button}
         onPress={() => navigation.navigate('Journal')}
-      />
-      <Button
-        title="Create Card"
+      >
+        <Text style={styles.buttonText}>Go to Journal</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.button, styles.createButton]}
         onPress={() => navigation.navigate('Create Card')}
-      />
-      {/* <Button title="Clean All Images" onPress={cleanAllImages} /> */}
+      >
+        <Text style={styles.buttonText}>Create Card</Text>
+      </TouchableOpacity>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#010101',
+    opacity: 0.7,
+  },
+  button: {
+    backgroundColor: '#3498db',
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 10,
+    marginVertical: 10,
+  },
+  createButton: {
+    backgroundColor: '#e74c3c',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 
 export default Home;
