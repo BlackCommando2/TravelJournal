@@ -32,14 +32,11 @@ const CreateCard = () => {
       multiple: true,
     })
       .then(images => {
-        // Set the image sources from the selected images
         let selectedImages = images.map(image => image.path);
         selectedImages = [...imageSources, ...selectedImages];
         setImageSources(selectedImages);
         console.log(selectedImages);
         console.log(imageSources);
-        // Save the selected images to AsyncStorage for persistence
-        // saveImagesToStorage(selectedImages);
       })
       .catch(error => {
         console.log('ImagePicker Error: ', error);
@@ -140,6 +137,8 @@ const CreateCard = () => {
             value={carddescription}
             onChangeText={setCarddescription}
             placeholder="Enter description..."
+            multiline={true}
+            numberOfLines={4}
           />
         </View>
         <View style={styles.buttonContainer}>
@@ -153,7 +152,7 @@ const CreateCard = () => {
             onPress={saveCard}
             color="#27ae60" // Custom button color
           />
-          <Button
+          {/* <Button
             title="Cleanup"
             onPress={clean}
             color="#e74c3c" // Custom button color
@@ -162,7 +161,7 @@ const CreateCard = () => {
             title="Clean All Images"
             onPress={cleanAllImages}
             color="#e74c3c" // Custom button color
-          />
+          /> */}
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -186,7 +185,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonContainer: {
-    height: 220,
+    height: 100,
     width: '100%',
     flexDirection: 'column',
     alignItems: 'center',
@@ -194,14 +193,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   textcontainer: {
-    backgroundColor: '#303030', // Color for the textcontainer background
+    backgroundColor: '#303030',
     padding: 20,
     marginBottom: 20,
     width: '100%',
 
   },
   input: {
-    color: '#000000',
+    color: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#ccc',
     padding: 10,
@@ -212,7 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 5,
-    color: '#000000',
+    color: '#FFFFFF',
   },
 });
 
